@@ -1,0 +1,20 @@
+name: Driver tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  behavior:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Groovy 2.4
+        run: |
+          curl --fail --location --silent --show-error https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-all/2.4.21/groovy-all-2.4.21.jar --output "$RUNNER_TEMP/groovy.jar"
+      - name: Test driver behavior
+        run: java -cp "$RUNNER_TEMP/groovy.jar" groovy.ui.GroovyMain tests/ApplianceCycleWatchTest.groovy
