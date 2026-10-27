@@ -8,13 +8,16 @@ jobs:
   behavior:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
         with:
           distribution: temurin
           java-version: '17'
       - name: Install Groovy 2.4
         run: |
           curl --fail --location --silent --show-error https://repo.maven.apache.org/maven2/org/codehaus/groovy/groovy-all/2.4.21/groovy-all-2.4.21.jar --output "$RUNNER_TEMP/groovy.jar"
+          printf '%s  %s\n' 'de65260cf2070442e99882f2f3d72e7531725c1e6a257446cc0cea525c607bd0' "$RUNNER_TEMP/groovy.jar" | sha256sum --check
       - name: Test driver behavior
         run: java -cp "$RUNNER_TEMP/groovy.jar" groovy.ui.GroovyMain tests/ApplianceCycleWatchTest.groovy
